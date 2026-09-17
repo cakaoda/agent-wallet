@@ -20,6 +20,13 @@ is produced locally and handed back as an opaque blob.
   **signs and sends a live on-chain transaction** to a `solana-test-validator`,
   then polls `getSignatureStatuses` until it is `confirmed`. Private key never
   touches the page or the RPC.
+- `devnet_claim.py` — **PUBLIC devnet proof**: the agent derives its keypair
+  at runtime from the mnemonic, signs a live on-chain transaction, submits it
+  to **solana-devnet** (public chain), and polls `getSignatureStatuses` until
+  `confirmed`. `devnet_proof.json` holds the on-chain signature + Solscan link.
+  Verified:
+  - Wallet: [`FYQHcP…Hizq1`](https://explorer.solana.com/address/FYQHcPU6hkffFaizh1DtCejW2cT1FtzLW855o2gHizq1?cluster=devnet)
+  - Tx: [`wZ5jqg…G71Vp5W`](https://explorer.solana.com/tx/wZ5jqgpHCopRYPSRPWvhb8JC5Vpym44F9zPta9Mk5QByXoHsGMDDTzYcCfufms1a4VrE5cmeTw4E7KSnG71Vp5W?cluster=devnet)
 - `stealth/` (in parent repo) — EIP-1193 mock provider injected at
   `document_start`, round-trip signing against a real dApp (dappOS).
 
@@ -36,14 +43,20 @@ python onchain_claim.py
 # -> submitted sig: ...
 # -> status: confirmed | err: None
 # -> PROOF OF BUILD ✅  agent-signed tx confirmed on-chain
+
+# Public devnet (no local validator needed)
+python devnet_claim.py
+# -> status: confirmed
+# -> tx: https://explorer.solana.com/tx/...?cluster=devnet
 ```
 
 ## Status
 - [x] Local keypair derivation from mnemonic (matches Phantom's address)
 - [x] Sign + independently verify a Solana message
 - [x] Agent signs + confirms an on-chain transaction (solana-test-validator)
+- [x] Agent signs + confirms on **solana-devnet** (public Solscan link)
 - [x] Phantom-shaped EIP-1193 provider, injected at `document_start`
-- [ ] Devnet / mainnet airdrop end-to-end (rate-limit dependent)
+- [ ] Mainnet airdrop end-to-end (rate-limit dependent)
 
 ## Business model
 Agent-as-a-service: crypto-native tools (airdrop claimers, DEX bots,
