@@ -1,0 +1,4 @@
+ledger/
+__pycache__/
+*.pyc
+*.png
